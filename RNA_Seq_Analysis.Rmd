@@ -1,0 +1,71 @@
+---
+title: "DSA4262 Project 1 - RNA-Seq Analysis"
+author: "Yan Jing Yi"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("bambu", update = FALSE)
+```
+
+## Using Bambu to output analysis
+
+```{r bambu, results=FALSE, warning=FALSE, message=FALSE}
+library(bambu)
+library(dplyr)
+
+# Read in datasets downloaded from S3
+fa.file <- 'reference/hg38_sequins_SIRV_ERCCs_longSIRVs.fa'
+gtf.file <- 'reference/hg38_sequins_SIRV_ERCCs_longSIRVs_v5_reformatted.gtf'
+reads_bam <- 'bam/SGNex_Hct116_directRNA_replicate3_run1.bam'
+
+# create a reference annotation to be used as input for bambu function
+annotations <- prepareAnnotations(gtf.file)  
+
+se <- bambu(reads = reads_bam, annotations = annotations, genome = fa.file, ncore = 4)  
+se
+```
+
+
+## Write Bambu output into output folder for further analysis
+```{r}
+writeBambuOutput(se, path = "./output/")
+```
+
+
+## Number of novel transcripts discovered
+```{r}
+# method 1: Count number of genes in se with the newTxClass not annotated
+length(which((mcols(se)$newTxClass)!='annotation'))
+```
+
+```{r}
+# method 2: Using transcripts_counts from output and filter TXNAME
+transcripts_counts <- as.data.frame(read.table(file = "output/counts_transcript.txt", header = TRUE))
+transcripts_counts <- data.frame(TXNAME = transcripts_counts$TXNAME, GENEID = transcripts_counts$GENEID, TX_EXPR = transcripts_counts$SGNex_Hct116_directRNA_replicate3_run1)
+# List of novel_transcripts
+novel_transcripts <- transcripts_counts[grepl("tx.", transcripts_counts$TXNAME),] 
+# Count number of rows
+nrow(novel_transcripts)
+```
+
+## 5 most highly expressed genes
+```{r}
+# read in output gene count table and sort in descending order to find top 5 most expressive genes
+gene_counts <- as.data.frame(read.table(file = "output/counts_gene.txt", header = TRUE))
+gene_counts <- data.frame(gene = row.names(gene_counts), counts = gene_counts$SGNex_Hct116_directRNA_replicate3_run1)
+
+gene_counts_desc <- gene_counts %>% group_by(gene) %>% arrange(desc(counts))
+head(gene_counts_desc, n=5)
+```
+
+## Min, Max, Average number of transcripts of each gene
+```{r}
+transcripts_counts_table <- aggregate(cbind(TRANSCRIPT_COUNT = TX_EXPR) ~ GENEID, data = transcripts_counts, FUN = function(x){NROW(x)}) %>%
+  arrange(desc(TRANSCRIPT_COUNT))
+summary(transcripts_counts_table)
+```
