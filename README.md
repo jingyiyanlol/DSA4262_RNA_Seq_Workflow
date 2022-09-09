@@ -80,7 +80,7 @@ Run the following commands to download the Bambu output for full dataset:
 aws s3 cp --no-sign-request s3://sg-nex-data/data/sequencing_data_ont/bam/genome/SGNex_Hct116_directRNA_replicate3_run1/SGNEX_Hct116_directRNA_replicate3_run1.bam bam/     
 ```
 
-2. Run the [R file](https://github.com/jingyiyanlol/DSA4262_RNA_Seq_Workflow/RNA_Seq_Analysis.R) / [Rmd file](https://github.com/jingyiyanlol/DSA4262_RNA_Seq_Workflow/RNA_Seq_Analysis.Rmd) in Rstudio. The [knitted HTML file](https://github.com/jingyiyanlol/DSA4262_RNA_Seq_Workflow/RNA_Seq_Analysis.html) from the Rmd file is also included in the repository.
+2. Run the [R file](https://github.com/jingyiyanlol/DSA4262_RNA_Seq_Workflow/blob/main/RNA_Seq_Analysis.R) / [Rmd file](https://github.com/jingyiyanlol/DSA4262_RNA_Seq_Workflow/blob/main/RNA_Seq_Analysis.Rmd) in Rstudio. The [knitted HTML file](https://github.com/jingyiyanlol/DSA4262_RNA_Seq_Workflow/blob/main/RNA_Seq_Analysis.html) from the Rmd file is also included in the repository.
 
 
 #### **Additional information:**
