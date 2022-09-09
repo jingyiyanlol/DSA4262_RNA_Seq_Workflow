@@ -30,7 +30,7 @@ rm nextflow/*
 wget https://www.dropbox.com/s/tu0c367dh0bsw6z/workflow_longReadRNASeq.nf -P nextflow/
 ```
 
-## Step 4: Download the Full Dataset using AWS CLI
+## Step 3: Download the Full Dataset using AWS CLI
 Run the following commands to download reference genome files:
 ```bash
 aws s3 cp --no-sign-request s3://sg-nex-data/data/annotations/genome_fasta/hg38_sequins_SIRV_ERCCs_longSIRVs.fa reference/
@@ -42,7 +42,7 @@ Run the following commands to download RNA sample fasq file to compare against r
 aws s3 cp --no-sign-request s3://sg-nex-data/data/sequencing_data_ont/fastq/SGNex_Hct116_directRNA_replicate3_run1/SGNex_Hct116_directRNA_replicate3_run1.fastq.gz fastq/
 ```
 
-## Step 5: Run the workflow using command in script
+## Step 4: Run the workflow using command in script
 Run the following command:
 ```bash
 source run-workflow.cmd
@@ -72,7 +72,7 @@ nextflow run nextflow/workflow_longReadRNASeq.nf -resume \
       --outdir $PWD/workshop/results/
 ```
 
-## Step 6: Getting insights from Bambu output for full dataset
+## Step 5: Getting insights from Bambu output for full dataset
 Run the following commands to download the Bambu output for full dataset:
 
 1. Download Bam file for full dataset from AWS S3:
